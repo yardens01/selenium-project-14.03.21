@@ -1,17 +1,8 @@
-import java.io.FileWriter;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
-
-
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import java.io.IOException;
-
+import org.openqa.selenium.*;
 import drivers.HomePage;
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
 
 
 public class Test {
