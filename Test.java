@@ -122,11 +122,14 @@ static void logginCheck(WebDriver driver, String email, String password)
 }
 
 
+
     
 }
 
    static void LogginTests(WebDriver driver) throws FileNotFoundException
    {
+
+
        //navigate to loggin page.
     logginNav(driver);
     //scann file for passwords
