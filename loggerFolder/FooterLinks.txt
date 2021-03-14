@@ -1,0 +1,16 @@
+About Us - http://tutorialsninja.com/demo/index.php?route=information/information&information_id=4
+Delivery Information - http://tutorialsninja.com/demo/index.php?route=information/information&information_id=6
+Privacy Policy - http://tutorialsninja.com/demo/index.php?route=information/information&information_id=3
+Terms & Conditions - http://tutorialsninja.com/demo/index.php?route=information/information&information_id=5
+Contact Us - http://tutorialsninja.com/demo/index.php?route=information/contact
+Returns - http://tutorialsninja.com/demo/index.php?route=account/return/add
+Site Map - http://tutorialsninja.com/demo/index.php?route=information/sitemap
+Brands - http://tutorialsninja.com/demo/index.php?route=product/manufacturer
+Gift Certificates - http://tutorialsninja.com/demo/index.php?route=account/voucher
+Affiliate - http://tutorialsninja.com/demo/index.php?route=affiliate/login
+Specials - http://tutorialsninja.com/demo/index.php?route=product/special
+My Account - http://tutorialsninja.com/demo/index.php?route=account/account
+Order History - http://tutorialsninja.com/demo/index.php?route=account/order
+Wish List - http://tutorialsninja.com/demo/index.php?route=account/wishlist
+Newsletter - http://tutorialsninja.com/demo/index.php?route=account/newsletter
+OpenCart - http://www.opencart.com/

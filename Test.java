@@ -1,7 +1,7 @@
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import org.openqa.selenium.*;
-import drivers.HomePage;
+
 import java.io.*;
 
 
@@ -12,15 +12,17 @@ public class Test {
         WebDriver driver=HomePage.chromeDriver(baseUrl);
         //create a logger folder.
        
-        newLoggerFolder.makeNewFolder();
-        //get all links from home page and write them to a file name HomePageLink.txt
-        allLinks(driver);
-        //get only top bar links
-        TopLinks(driver);
-        //check if loggin works
-        LogginTests(driver);
-        System.out.println("end of program");
-
+        // newLoggerFolder.makeNewFolder();
+        // //get all links from home page and write them to a file name HomePageLink.txt
+        // allLinks(driver);
+        // //get only top bar links
+        // TopLinks(driver);
+        // //check if loggin works
+        // LogginTests(driver);
+        // System.out.println("end of program");
+        // //write all FooterLinks
+        // FooterLinks(driver);
+        footerLinkCheck(driver);
        
  
         driver.close();
@@ -36,7 +38,7 @@ public class Test {
         String details;
            //Get list of web-elements with tagName  - a
         List<WebElement> allLinks = driver.findElements(By.tagName("a"));
-        logger.write("----start of log----");
+        // logger.write("----start of log----" +"\n");
            //going through the list and logging all links by text name and atrribute
           for(WebElement link:allLinks){
             details= (link.getAttribute("textContent") + " - " + link.getAttribute("href"));
@@ -44,7 +46,7 @@ public class Test {
            
 
     }
-    logger.append("-----end of log---- \n");
+    // logger.append("-----end of log---- \n");
     logger.close();
     
     System.out.println("home page link has been logged.");
@@ -62,7 +64,7 @@ public class Test {
         String details;
            //Get list of web-elements with tagName  - a
         List<WebElement> TopLinks = driver.findElements(By.xpath("//*[@id='menu']/div[2]/ul//li//a"));
-        logger.write("----start of log----" +"\n");
+        // logger.write("----start of log----" +"\n");
            //going through the list and logging all links by text name and atrribute
           for(WebElement link:TopLinks){
             details= (link.getAttribute("textContent")+ " - " + link.getAttribute("href"));
@@ -73,7 +75,7 @@ public class Test {
            lg.append(details+ "\n");}
 
     }
-    logger.append("-----end of log---- \n");
+    // logger.append("-----end of log---- \n");
     logger.close();
     lg.close();
     
@@ -126,7 +128,7 @@ static void logginCheck(WebDriver driver, String email, String password)
     
 }
 
-   static void LogginTests(WebDriver driver) throws FileNotFoundException
+static void LogginTests(WebDriver driver) throws FileNotFoundException
    {
 
 
@@ -151,7 +153,7 @@ static void logginCheck(WebDriver driver, String email, String password)
     scanner.close();
    }
 
-   static void loggOut(WebDriver driver){
+static void loggOut(WebDriver driver){
     driver.findElement(By.xpath("//*[@id='top-links']/ul/li[2]/a/span[1]")).click();
     driver.findElement(By.xpath("//a[contains(text(),'Logout')]")).click();
     driver.findElement(By.xpath("//a[contains(text(),'Continue')]")).click();
@@ -160,4 +162,62 @@ static void logginCheck(WebDriver driver, String email, String password)
 
 }
 
+static void FooterLinks(WebDriver driver) throws IOException
+    {
+        System.out.println("-FooterLinks function started-");
+        //create a new log txt file.
+        FileWriter logger=new FileWriter("loggerFolder\\FooterLinks.txt");
+        System.out.println("footer Logger start");
+        String details;
+           //Get list of web-elements with tagName  - a
+        List<WebElement> footerLinks = driver.findElements(By.xpath("//footer//a"));
+        // logger.write("----start of log----" +"\n");
+           //going through the list and logging all links by text name and atrribute
+          for(WebElement link:footerLinks){
+            details= (link.getAttribute("textContent")+ " - " + link.getAttribute("href"));
+            logger.append(details+"\n");
+            //search for products active links and log the in a file
+      
+          }
+    // logger.append("-----end of log---- \n");
+    logger.close();
+  
+    
+    System.out.println("footer links has been logged.");
+    }
+
+static void footerLinkCheck(WebDriver driver) throws IOException
+{
+    File f=new File("loggerFolder\\FooterLinks.txt");
+    Scanner scanner=new Scanner(f);
+    String link;
+    while (scanner.hasNextLine()) {
+        link=scanner.nextLine();
+        String details[]=link.split(" - ");
+        String linkName=details[0];
+        String linkUrl=details[1];
+        // System.out.println(linkName);
+        // System.out.println(linkUrl);
+        System.out.println(linkCheck(driver, linkUrl));
+        driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
+        
+
+}
+scanner.close();
+
+
+ }
+
+ static boolean linkCheck(WebDriver driver, String linkUrl)
+ {
+
+   String currentUrl= driver.getCurrentUrl();
+    driver.get(linkUrl);
+    String newUrl=driver.getCurrentUrl();
+    driver.navigate().back();
+    if(newUrl.equals(currentUrl))
+    return true;
+    return false;
+
+ }
 }
