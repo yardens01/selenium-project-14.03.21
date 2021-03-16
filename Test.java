@@ -1,28 +1,42 @@
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import org.openqa.selenium.*;
-
+import java.awt.datatransfer.StringSelection;
+import java.awt.event.KeyEvent;
 import java.io.*;
+import java.awt.*;
+import java.util.List;
+
+
 
 
 public class Test {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException,InterruptedException, AWTException {
         //driver base url and webpage start
         String baseUrl="http://tutorialsninja.com/demo/index.php";
         WebDriver driver=HomePage.chromeDriver(baseUrl);
         //create a logger folder.
        
-        // newLoggerFolder.makeNewFolder();
-        // //get all links from home page and write them to a file name HomePageLink.txt
-        // allLinks(driver);
-        // //get only top bar links
-        // TopLinks(driver);
-        // //check if loggin works
-        // LogginTests(driver);
-        // System.out.println("end of program");
-        // //write all FooterLinks
-        // FooterLinks(driver);
+        newLoggerFolder.makeNewFolder();
+        //get all links from home page and write them to a file name HomePageLink.txt
+        allLinks(driver);
+        //get only top bar links
+        TopLinks(driver);
+        //check if loggin works
+        LogginTests(driver);
+        System.out.println("end of program");
+        //write all FooterLinks
+        FooterLinks(driver);
         footerLinkCheck(driver);
+
+        uploadFiles(driver);
+        checkout(driver);
+        MyCartCheck(driver);
+       
+
+
+
+
        
  
         driver.close();
@@ -194,7 +208,6 @@ static void footerLinkCheck(WebDriver driver) throws IOException
     while (scanner.hasNextLine()) {
         link=scanner.nextLine();
         String details[]=link.split(" - ");
-        String linkName=details[0];
         String linkUrl=details[1];
         // System.out.println(linkName);
         // System.out.println(linkUrl);
@@ -220,4 +233,117 @@ scanner.close();
     return false;
 
  }
+
+ public static void checkout(WebDriver driver) throws InterruptedException
+ {
+     //proceed checkout
+     driver.findElement(By.xpath("//a[@class='btn btn-primary']")).click();
+     Thread.sleep(1000);
+
+     //choose user: new/register/guest
+     driver.findElement(By.xpath("//input[@value='guest']")).click();
+     driver.findElement(By.xpath("//input[@id='button-account']")).click();
+     Thread.sleep(2000);
+
+     //input guest user detailes
+     driver.findElement(By.xpath("//input[@id='input-payment-firstname']")).sendKeys("israel");
+     driver.findElement(By.xpath("//input[@id='input-payment-lastname']")).sendKeys("israeli");
+     driver.findElement(By.xpath("//input[@id='input-payment-email']")).sendKeys("israel123@gmail.com");
+     driver.findElement(By.xpath("//input[@id='input-payment-telephone']")).sendKeys("02-555256");
+     driver.findElement(By.xpath("//input[@id='input-payment-address-1']")).sendKeys("Alenby");
+     driver.findElement(By.xpath("//input[@id='input-payment-city']")).sendKeys("Tel Aviv");
+     driver.findElement(By.xpath("//input[@id='button-guest']")).click();
+     Thread.sleep(2000);
+
+     //Leave a comment about your order
+     driver.findElement(By.xpath("//textarea[@name='comment']")).sendKeys("Need the item Asap");
+     driver.findElement(By.xpath("//input[@id='button-shipping-method']")).click();
+     Thread.sleep(2000);
+
+     //Accept the terms
+     driver.findElement(By.xpath("//input[@name='agree']")).click();
+     driver.findElement(By.xpath("//input[@id='button-payment-method']")).click();
+     Thread.sleep(2000);
+
+     //Order confirmation
+     driver.findElement(By.xpath("//input[@id='button-confirm']")).click();
+     Thread.sleep(1000);
+     String confirmation = driver.findElement(By.xpath("//h1[normalize-space()='Your order has been placed!']")).getText();
+     System.out.println(confirmation);
+     Thread.sleep(1000);
+     driver.findElement(By.xpath("//a[normalize-space()='Continue']")).click();
+
+
+ }
+ public static void MyCartCheck(WebDriver driver) throws IOException, InterruptedException {
+    //add product to the cart
+    driver.findElement(By.xpath("//a[normalize-space()='iPhone']")).click();
+    driver.findElement(By.xpath("//input[@id='input-quantity']")).clear();
+    driver.findElement(By.xpath("//input[@id='input-quantity']")).sendKeys("3");
+    driver.findElement(By.xpath("//button[@id='button-cart']")).click();
+
+    //open shopping cart
+    driver.findElement(By.cssSelector(".fa.fa-shopping-cart")).click();
+    
+    //enter coupon code
+    driver.findElement(By.xpath("//a[normalize-space()='Use Coupon Code']")).click();
+    driver.findElement(By.xpath("//input[@id='input-coupon']")).sendKeys("Ab12345");
+    driver.findElement(By.xpath("//input[@id='button-coupon']")).click();
+    Thread.sleep(1000);
+    
+    //enter shipping country and city
+    driver.findElement(By.xpath("//a[normalize-space()='Estimate Shipping & Taxes']")).click();
+    driver.findElement(By.xpath("//*[@id=\"input-country\"]/option[113]")).click();
+    Thread.sleep(1000);
+    driver.findElement(By.xpath("//*[@id=\"input-zone\"]/option[12]")).click();
+    driver.findElement(By.xpath("//input[@id='input-postcode']")).sendKeys("556644");
+    driver.findElement(By.xpath("//button[normalize-space()='Get Quotes']")).click();
+    Thread.sleep(1000);
+    driver.findElement(By.xpath("//input[@name='shipping_method']")).click();
+    driver.findElement(By.xpath("//input[@id='button-shipping']")).click();
+    Thread.sleep(1000);
+    
+    //enetr gift card
+    driver.findElement(By.xpath("//a[normalize-space()='Use Gift Certificate']")).click();
+    driver.findElement(By.xpath("//input[@id='input-voucher']")).sendKeys("Ab123456");
+    driver.findElement(By.xpath("//input[@id='button-voucher']")).click();
+    
+
+}
+public static void uploadFiles(WebDriver driver)  throws AWTException,InterruptedException{
+    driver.get("http://tutorialsninja.com/demo/index.php?route=product/product&product_id=42");
+    WebElement element = driver.findElement(By.id("button-upload222"));
+            element.click();
+    //location of picture as set by file uploader!
+            StringSelection ss = new StringSelection("C:\\Users\\yarden schorr\\Documents\\project\\selenium project\\smiley.png");
+		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(ss, null);
+		// Ctrl + v
+		Robot robot = new Robot();
+		robot.keyPress(KeyEvent.VK_CONTROL);
+		robot.keyPress(KeyEvent.VK_V);
+		robot.keyRelease(KeyEvent.VK_V);
+		robot.keyRelease(KeyEvent.VK_CONTROL);
+		Thread.sleep(2000);
+		robot.keyPress(KeyEvent.VK_ENTER);
+		robot.keyRelease(KeyEvent.VK_ENTER);
+        Thread.sleep(2000);
+        isAlertPresent(driver,robot);
+        
+        driver.navigate().back();
+        
+}
+public static boolean isAlertPresent(WebDriver driver,Robot robot)  throws InterruptedException
+{ 
+    try 
+    { 
+        driver.switchTo().alert().dismiss();
+        System.out.println("file uploaded successfully");
+        return true; 
+    }   // try 
+    catch (NoAlertPresentException Ex) 
+    { 
+        System.out.println("file uploaded failed");
+        return false; 
+    }   // catch 
+}   // isAlertPresent()
 }
